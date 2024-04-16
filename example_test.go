@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package genai_test
+package gemini_test
 
 import (
 	"context"
 	"fmt"
 	"log"
 
-	"cloud.google.com/go/vertexai/genai"
+	gemini "github.com/xops-infra/go-gemini"
 
 	"google.golang.org/api/iterator"
 )
@@ -35,7 +35,7 @@ const model = "some-model"
 
 func ExampleGenerativeModel_GenerateContent() {
 	ctx := context.Background()
-	client, err := genai.NewClient(ctx, projectID, location)
+	client, err := gemini.NewClient(ctx, projectID, location)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -43,7 +43,7 @@ func ExampleGenerativeModel_GenerateContent() {
 
 	model := client.GenerativeModel(model)
 	model.SetTemperature(0.9)
-	resp, err := model.GenerateContent(ctx, genai.Text("What is the average size of a swallow?"))
+	resp, err := model.GenerateContent(ctx, gemini.Text("What is the average size of a swallow?"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -53,7 +53,7 @@ func ExampleGenerativeModel_GenerateContent() {
 
 func ExampleGenerativeModel_GenerateContentStream() {
 	ctx := context.Background()
-	client, err := genai.NewClient(ctx, projectID, location)
+	client, err := gemini.NewClient(ctx, projectID, location)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -61,7 +61,7 @@ func ExampleGenerativeModel_GenerateContentStream() {
 
 	model := client.GenerativeModel(model)
 
-	iter := model.GenerateContentStream(ctx, genai.Text("Tell me a story about a lumberjack and his giant ox. Keep it very short."))
+	iter := model.GenerateContentStream(ctx, gemini.Text("Tell me a story about a lumberjack and his giant ox. Keep it very short."))
 	for {
 		resp, err := iter.Next()
 		if err == iterator.Done {
@@ -76,7 +76,7 @@ func ExampleGenerativeModel_GenerateContentStream() {
 
 func ExampleGenerativeModel_CountTokens() {
 	ctx := context.Background()
-	client, err := genai.NewClient(ctx, projectID, location)
+	client, err := gemini.NewClient(ctx, projectID, location)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -84,7 +84,7 @@ func ExampleGenerativeModel_CountTokens() {
 
 	model := client.GenerativeModel(model)
 
-	resp, err := model.CountTokens(ctx, genai.Text("What kind of fish is this?"))
+	resp, err := model.CountTokens(ctx, gemini.Text("What kind of fish is this?"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -94,7 +94,7 @@ func ExampleGenerativeModel_CountTokens() {
 
 func ExampleChatSession() {
 	ctx := context.Background()
-	client, err := genai.NewClient(ctx, projectID, location)
+	client, err := gemini.NewClient(ctx, projectID, location)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -102,9 +102,9 @@ func ExampleChatSession() {
 	model := client.GenerativeModel(model)
 	cs := model.StartChat()
 
-	send := func(msg string) *genai.GenerateContentResponse {
+	send := func(msg string) *gemini.GenerateContentResponse {
 		fmt.Printf("== Me: %s\n== Model:\n", msg)
-		res, err := cs.SendMessage(ctx, genai.Text(msg))
+		res, err := cs.SendMessage(ctx, gemini.Text(msg))
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -113,7 +113,7 @@ func ExampleChatSession() {
 
 	res := send("Can you name some brands of air fryer?")
 	printResponse(res)
-	iter := cs.SendMessageStream(ctx, genai.Text("Which one of those do you recommend?"))
+	iter := cs.SendMessageStream(ctx, gemini.Text("Which one of those do you recommend?"))
 	for {
 		res, err := iter.Next()
 		if err == iterator.Done {
@@ -135,7 +135,7 @@ func ExampleChatSession() {
 	printResponse(res)
 }
 
-func printResponse(resp *genai.GenerateContentResponse) {
+func printResponse(resp *gemini.GenerateContentResponse) {
 	for _, cand := range resp.Candidates {
 		for _, part := range cand.Content.Parts {
 			fmt.Println(part)
