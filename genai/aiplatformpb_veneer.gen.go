@@ -21,7 +21,7 @@ import (
 
 	pb "cloud.google.com/go/aiplatform/apiv1beta1/aiplatformpb"
 	"cloud.google.com/go/civil"
-	"cloud.google.com/go/vertexai/internal/support"
+	"github.com/xops-infra/go-gemini/internal/support"
 )
 
 // Blob contains raw media bytes.

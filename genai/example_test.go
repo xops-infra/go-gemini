@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"log"
 
-	gemini "github.com/xops-infra/go-gemini"
+	gemini "github.com/xops-infra/go-gemini/genai"
 
 	"google.golang.org/api/iterator"
 )

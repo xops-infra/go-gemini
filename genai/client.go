@@ -28,8 +28,8 @@ import (
 
 	aiplatform "cloud.google.com/go/aiplatform/apiv1beta1"
 	pb "cloud.google.com/go/aiplatform/apiv1beta1/aiplatformpb"
-	"cloud.google.com/go/vertexai/internal"
-	"cloud.google.com/go/vertexai/internal/support"
+	"github.com/xops-infra/go-gemini/internal/support"
+	"github.com/xops-infra/go-gemini/internal"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 )
@@ -114,6 +114,10 @@ func (m *GenerativeModel) Name() string {
 // GenerateContent produces a single request and response.
 func (m *GenerativeModel) GenerateContent(ctx context.Context, parts ...Part) (*GenerateContentResponse, error) {
 	return m.generateContent(ctx, m.newGenerateContentRequest(newUserContent(parts)))
+}
+
+func (m *GenerativeModel) GenerateWithContext(ctx context.Context, contents ...*Content) (*GenerateContentResponse, error) {
+	return m.generateContent(ctx, m.newGenerateContentRequest(contents...))
 }
 
 // GenerateContentStream returns an iterator that enumerates responses.
