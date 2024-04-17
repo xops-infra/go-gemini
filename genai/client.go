@@ -268,7 +268,7 @@ func joinCandidateLists(dest, src []*Candidate) []*Candidate {
 	}
 	for _, d := range dest {
 		s := indexToSrcCandidate[d.Index]
-		if s != nil {
+		if s.Content != nil {
 			d.Content = joinContent(d.Content, s.Content)
 			// Take the last of these.
 			d.FinishReason = s.FinishReason
