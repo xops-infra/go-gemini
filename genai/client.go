@@ -116,7 +116,7 @@ func (m *GenerativeModel) GenerateContent(ctx context.Context, parts ...Part) (*
 	return m.generateContent(ctx, m.newGenerateContentRequest(newUserContent(parts)))
 }
 
-func (m *GenerativeModel) GenerateWithContext(ctx context.Context, contents ...*Content) (*GenerateContentResponse, error) {
+func (m *GenerativeModel) GenerateContentWithContext(ctx context.Context, contents ...*Content) (*GenerateContentResponse, error) {
 	return m.generateContent(ctx, m.newGenerateContentRequest(contents...))
 }
 
@@ -128,6 +128,15 @@ func (m *GenerativeModel) GenerateContentStream(ctx context.Context, parts ...Pa
 		err: err,
 	}
 }
+
+func (m *GenerativeModel) GenerateContentStreamWithContext(ctx context.Context, contents ...*Content) *GenerateContentResponseIterator {
+	streamClient, err := m.c.c.StreamGenerateContent(ctx, m.newGenerateContentRequest(contents...))
+	return &GenerateContentResponseIterator{
+		sc:  streamClient,
+		err: err,
+	}
+}
+
 
 func (m *GenerativeModel) generateContent(ctx context.Context, req *pb.GenerateContentRequest) (*GenerateContentResponse, error) {
 	res, err := m.c.c.GenerateContent(ctx, req)
